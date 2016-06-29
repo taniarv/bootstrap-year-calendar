@@ -256,3 +256,11 @@
 .calendar-context-menu  .item:hover > .submenu {
 	display:block;
 }
+
+.day-content.school_day {
+  color: green;
+}
+
+.day-content.holiday {
+  color: red;
+}

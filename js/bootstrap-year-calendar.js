@@ -182,13 +182,20 @@
 			var monthsDiv = $(document.createElement('div'));
 			monthsDiv.addClass('months-container');
 			
-			for(var m = 0; m < 12; m++) {
-				/* Container */
+			var momentCurrentDate = moment(this.options.minDate)
+			var momentMaxDate = moment(this.options.maxDate)
+			
+			while(momentCurrentDate < momentMaxDate) {
+				var m = momentCurrentDate.month();
+				var y = momentCurrentDate.year();
+
+					/* Container */
 				var monthDiv = $(document.createElement('div'));
 				monthDiv.addClass('month-container');
 				monthDiv.data('month-id', m);
+				monthDiv.data('year', y);
 				
-				var firstDate = new Date(this.options.startYear, m, 1);
+				var firstDate = new Date(y, m, 1);
 				
 				var table = $(document.createElement('table'));
 				table.addClass('month');
@@ -201,7 +208,7 @@
 				var titleCell = $(document.createElement('th'));
 				titleCell.addClass('month-title');
 				titleCell.attr('colspan', this.options.displayWeekNumber ? 8 : 7);
-				titleCell.text(dates[this.options.language].months[m]);
+				titleCell.text(dates[this.options.language].months[m] + " " + y);
 				
 				titleRow.append(titleCell);
 				thead.append(titleRow);
@@ -239,7 +246,7 @@
 				
 				/* Days */
 				var currentDate = new Date(firstDate.getTime());
-				var lastDate = new Date(this.options.startYear, m + 1, 0);
+				var lastDate = new Date(y, m + 1, 0);
 				
 				var weekStart = dates[this.options.language].weekStart
 				
@@ -301,6 +308,8 @@
 				monthDiv.append(table);
 				
 				monthsDiv.append(monthDiv);
+				
+				momentCurrentDate.add(1, 'month')
 			}
 			
 			this.element.append(monthsDiv);
@@ -763,7 +772,7 @@
 		_getDate: function(elt) {
 			var day = elt.children('.day-content').text();
 			var month = elt.closest('.month-container').data('month-id');
-			var year = this.options.startYear;
+			var year = elt.closest('.month-container').data('year');
 
 			return new Date(year, month, day);
 		},
